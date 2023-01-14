@@ -10,7 +10,6 @@ const Home = () => {
   // call setUserInput and set to whatever is in the textarea.
   // allows value of userInput to always be what is in the textarea.
   const onUserChangedText = (event) => {
-    console.log(event.target.value);
     setUserInput(event.target.value);
   };
 
@@ -35,6 +34,13 @@ const Home = () => {
               value={userInput}
               onChange={onUserChangedText}
             />
+            <div className="prompt-buttons">
+              <a className="generate-button" onClick={null}>
+                <div className="generate">
+                  <p>Generate</p>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
       </div>
