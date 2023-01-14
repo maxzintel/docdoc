@@ -21,10 +21,10 @@ const Home = () => {
       <div className="container">
         <div className="header">
           <div className="header-title">
-            <h1>sup, insert your headline here</h1>
+            <h1>👋 hi, I'm Pac, Capsule's AI assistant</h1>
           </div>
           <div className="header-subtitle">
-            <h2>insert your subtitle here</h2>
+            <h2>Need help understanding some of our documentation? Ask here.</h2>
           </div>
           {/* Add this code here*/}
           <div className="prompt-container">
