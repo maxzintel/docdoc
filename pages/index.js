@@ -5,7 +5,15 @@ import buildspaceLogo from '../assets/buildspace-logo.png';
 import { useState } from 'react';
 
 const Home = () => {
+
   const [userInput, setUserInput] = useState('');
+  // call setUserInput and set to whatever is in the textarea.
+  // allows value of userInput to always be what is in the textarea.
+  const onUserChangedText = (event) => {
+    console.log(event.target.value);
+    setUserInput(event.target.value);
+  };
+
   return (
     <div className="root">
       <Head>
@@ -21,7 +29,12 @@ const Home = () => {
           </div>
           {/* Add this code here*/}
           <div className="prompt-container">
-            <textarea placeholder="start typing here" className="prompt-box" />
+            <textarea 
+              placeholder="start typing here" 
+              className="prompt-box" 
+              value={userInput}
+              onChange={onUserChangedText}
+            />
           </div>
         </div>
       </div>
