@@ -7,6 +7,36 @@ import { useState } from 'react';
 const Home = () => {
 
   const [userInput, setUserInput] = useState('');
+  // apiOutput is where we store the output of the api we want to show the user
+  const [apiOutput, setApiOutput] = useState('');
+  // isGenerating allows us to have a loading state
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const callGenerateEndpoint = async () => {
+    // set the loading state to true.
+    setIsGenerating(true);
+
+    console.log("Calling OpenAI...")
+    // make a call to our generate.js script that handles communication with openai.
+    const response = await fetch('/api/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userInput }),
+    });
+
+    // convert the response to json, then extract output using object destructuring.
+    const data = await response.json();
+    const { output } = data;
+    console.log("OpenAI replied...", output.text)
+
+    // set apiOutput to the text response.
+    setApiOutput(`${output.text}`);
+    // we are no longer loading so unset is generating
+    setIsGenerating(false);
+  }
+
   // call setUserInput and set to whatever is in the textarea.
   // allows value of userInput to always be what is in the textarea.
   const onUserChangedText = (event) => {
@@ -35,7 +65,7 @@ const Home = () => {
               onChange={onUserChangedText}
             />
             <div className="prompt-buttons">
-              <a className="generate-button" onClick={null}>
+              <a className="generate-button" onClick={callGenerateEndpoint}>
                 <div className="generate">
                   <p>Generate</p>
                 </div>
