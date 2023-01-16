@@ -4,13 +4,32 @@ import buildspaceLogo from '../assets/buildspace-logo.png';
 
 import { useState } from 'react';
 
-const Home = () => {
+import fs from 'fs';
 
+export function getServerSideProps() {
+  const basePromptPrefix = [];
+  const docPath = './pages/api/docs';
+  const files = fs.readdirSync(docPath);
+
+  for (const file of files) {
+    if(file.endsWith('.md')) {
+      const mdFilePath = `${docPath}/${file}`;
+      const mdContent = fs.readFileSync(mdFilePath, 'utf8');
+      basePromptPrefix.push(mdContent);
+    }
+  }
+
+  return { props: { basePromptPrefix } };
+}
+
+const Home = ( basePromptPrefix ) => {  
   const [userInput, setUserInput] = useState('');
   // apiOutput is where we store the output of the api we want to show the user
   const [apiOutput, setApiOutput] = useState('');
   // isGenerating allows us to have a loading state
   const [isGenerating, setIsGenerating] = useState(false);
+
+  console.log(basePromptPrefix);
 
   const callGenerateEndpoint = async () => {
     // set the loading state to true.

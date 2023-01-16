@@ -1,4 +1,5 @@
 import { Configuration, OpenAIApi } from 'openai';
+import { getServerSideProps } from './pages/index.js';
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -6,7 +7,6 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-const basePromptPrefix = "";
 const generateAction = async (req, res) => {
   console.log(`API: ${basePromptPrefix}${req.body.userInput}`)
 
@@ -15,7 +15,7 @@ const generateAction = async (req, res) => {
     // model type we want to use.
     model: 'text-davinci-003',
     // prompt we are passing. Base prompt and user input.
-    prompt: `${basePromptPrefix}${req.body.userInput}`,
+    prompt: `${basePromptPrefix[0]}${req.body.userInput}`,
     // risk level we want openai to take.
     temperature: 0.7,
     // increase to allow for longer prompts. 250 = approx 1000 characters.
