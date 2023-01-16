@@ -1,5 +1,5 @@
 import { Configuration, OpenAIApi } from 'openai';
-import { getServerSideProps } from './pages/index.js';
+import { basePromptPrefix } from '../index.js';
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -8,6 +8,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 const generateAction = async (req, res) => {
+  console.log(`base prefix: ${basePromptPrefix}`)
   console.log(`API: ${basePromptPrefix}${req.body.userInput}`)
 
   // see createCompletion docs here: https://beta.openai.com/docs/api-reference/completions/create?utm_source=buildspace.so&utm_medium=buildspace_project
