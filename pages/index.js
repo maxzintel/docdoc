@@ -5,11 +5,12 @@ import buildspaceLogo from '../assets/buildspace-logo.png';
 import { useState } from 'react';
 
 import fs from 'fs';
-export const basePromptPrefix = [];
+import { setBasePromptPrefix } from '../shared/basePromptPrefix';
 
 export function getServerSideProps() {
   const docPath = './pages/api/docs';
   const files = fs.readdirSync(docPath);
+  let basePromptPrefix = [];
 
   for (const file of files) {
     if(file.endsWith('.md')) {
@@ -18,12 +19,14 @@ export function getServerSideProps() {
       basePromptPrefix.push(mdContent);
     }
   }
+  setBasePromptPrefix(basePromptPrefix);
 
   return { props: { basePromptPrefix } };
 }
 
-const Home = ( basePromptPrefix ) => {  
-  basePromptPrefix = `${basePromptPrefix}`
+const Home = ({ basePromptPrefix }) => {
+  let basePrompt = basePromptPrefix.join("\n");
+  // console.log("BasePromptPrefix" + basePromptPrefix);
   const [userInput, setUserInput] = useState('');
   // apiOutput is where we store the output of the api we want to show the user
   const [apiOutput, setApiOutput] = useState('');
@@ -34,14 +37,20 @@ const Home = ( basePromptPrefix ) => {
     // set the loading state to true.
     setIsGenerating(true);
 
+    // combine userInput and basePrompt.
+    let completePrompt = `${basePrompt}\n${userInput}`;
+    // let completePrompt2 = JSON.stringify({completePrompt})
+    console.log(completePrompt);
+
     console.log("Calling OpenAI...")
+    // let combinePrefixAndInput = basePromptPrefix + userInput;
     // make a call to our generate.js script that handles communication with openai.
     const response = await fetch('/api/generate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ userInput }),
+      body: JSON.stringify({ completePrompt }),
     });
 
     // convert the response to json, then extract output using object destructuring.
